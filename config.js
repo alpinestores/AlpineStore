@@ -61,7 +61,9 @@ async function uploadImage(file) {
   const id = f.id || f.fileId || f._id;
   const url = f.url || f.fileUrl || f.publicUrl;
   if (!id || !url) {
-    throw new Error("Pronto upload finished but returned an unexpected format. Open the browser console (F12) and send me the 'Pronto upload result' line.");
+    let shown = "";
+    try { shown = JSON.stringify(res); } catch (e) { shown = String(res); }
+    throw new Error("Pronto replied with: " + shown.slice(0, 600));
   }
   return "pronto:" + id + "|" + url;
 }
