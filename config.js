@@ -16,6 +16,15 @@ const CONFIG = {
   // NEW images are stored on Pronto (GetPronto)
   prontoPublicKey: "pronto_pk__vbQ7hczsHkaAj8AbC8_S0RdI7d9G",
   prontoSdkUrl: "https://esm.sh/getpronto-sdk@1.3.1",
+
+  // EmailJS — PUBLIC values only. Never put a private key here.
+  // Leave a value "" to switch that email off.
+  emailjs: {
+    publicKey: "",           // EmailJS > Account > Public Key
+    serviceId: "",           // EmailJS > Email Services > Service ID
+    adminTemplateId: "",     // template that emails YOU about a new request
+    customerTemplateId: "",  // template that emails the CUSTOMER a confirmation
+  },
 };
 
 // Appwrite SDK is loaded from a <script> tag before this file
