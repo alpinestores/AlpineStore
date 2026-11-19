@@ -59,7 +59,7 @@ async function uploadImage(file) {
   console.log("Pronto upload result:", res);
   const f = (res && (res.file || res.data)) || res || {};
   const id = f.id || f.fileId || f._id;
-  const url = f.url || f.fileUrl || f.publicUrl;
+  const url = f.rawUrl || f.secureUrl || f.url || f.fileUrl || f.publicUrl;
   if (!id || !url) {
     let shown = "";
     try { shown = JSON.stringify(res); } catch (e) { shown = String(res); }
