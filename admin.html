@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>ALPINESTORES — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <section id="loginView" class="login-wrap">
+    <div class="login-card">
+      <div class="logo">ALPINE<span>STORES</span></div>
+      <p class="sub">Admin Access</p>
+      <input id="loginEmail" type="email" placeholder="Email" autocomplete="username" />
+      <input id="loginPass" type="password" placeholder="Password" autocomplete="current-password" />
+      <p id="loginError" class="error"></p>
+      <button id="loginBtn" class="btn gold">LOG IN</button>
+      <a href="index.html" class="back">← Back to showroom</a>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="appView" class="hidden">
+    <header class="bar">
+      <div class="logo">ALPINE<span>STORES</span> <em>ADMIN</em></div>
+      <div class="bar-right">
+        <a href="index.html" target="_blank" class="btn ghost small">View site</a>
+        <button id="logoutBtn" class="btn ghost small">Log out</button>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="carsPanel">Cars</button>
+      <button class="tab" data-tab="reqPanel">Purchase Requests <b id="reqBadge" class="badge hidden">0</b></button>
+    </nav>
+
+    <!-- CARS -->
+    <main id="carsPanel" class="panel">
+      <div class="panel-head">
+        <h2>Showcase Cars</h2>
+        <button id="addCarBtn" class="btn gold">+ Add Car</button>
+      </div>
+      <p class="hint">The order here is the order customers see. Use ▲ ▼ to reorder.</p>
+      <div id="carList" class="rows"></div>
+    </main>
+
+    <!-- REQUESTS -->
+    <main id="reqPanel" class="panel hidden">
+      <div class="panel-head"><h2>Purchase Requests</h2></div>
+      <p class="hint">New requests appear here live with a sound. Marking a request "completed" does NOT mark the car sold. Do that in the Cars tab.</p>
+      <div id="reqList" class="rows"></div>
+    </main>
+  </section>
+
+  <!-- EDITOR -->
+  <div id="editorModal" class="modal">
+    <div class="modal-box">
+      <button class="x" id="editorClose">&times;</button>
+      <h2 id="editorTitle">Add Car</h2>
+
+      <label>Car name</label>
+      <input id="fName" type="text" maxlength="100" />
+
+      <label>Price (INR)</label>
+      <input id="fPrice" type="number" min="0" />
+
+      <label>Description</label>
+      <textarea id="fDesc" rows="3" maxlength="2000"></textarea>
+
+      <label>Customization details</label>
+      <textarea id="fCustom" rows="3" maxlength="2000"></textarea>
+
+      <label>Availability</label>
+      <select id="fStatus">
+        <option value="available">Available</option>
+        <option value="sold">Sold</option>
+      </select>
+
+      <label>Main image <span id="mainHint" class="hint-inline"></span></label>
+      <input id="fMain" type="file" accept="image/png,image/jpeg,image/webp" />
+      <div id="mainPreview" class="thumbs"></div>
+
+      <label>Additional images (select several)</label>
+      <input id="fGallery" type="file" accept="image/png,image/jpeg,image/webp" multiple />
+      <div id="galleryPreview" class="thumbs"></div>
+
+      <p id="editorError" class="error"></p>
+      <p id="editorProgress" class="hint"></p>
+      <div class="modal-actions">
+        <button id="editorCancel" class="btn ghost">Cancel</button>
+        <button id="editorSave" class="btn gold">Save Car</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2/dist/iife/sdk.js"></script>
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
