@@ -181,7 +181,7 @@ async function deleteCar(car) {
   try {
     await databases.deleteDocument(CONFIG.databaseId, CONFIG.carsCollectionId, car.$id);
     const ids = [car.mainImageId, ...(car.galleryImageIds || [])].filter(Boolean);
-    for (const id of ids) { try { await storage.deleteFile(CONFIG.bucketId, id); } catch (e) {} }
+    for (const id of ids) { try { await deleteImage(id); } catch (e) {} }
     toast("Car deleted");
     await loadCars();
   } catch (e) { toast("Delete failed: " + e.message); }
@@ -244,9 +244,9 @@ $("addCarBtn").addEventListener("click", () => openEditor(null));
 $("editorClose").addEventListener("click", closeEditor);
 $("editorCancel").addEventListener("click", closeEditor);
 
+// Uploads one image to Pronto and returns the reference saved in the database
 async function uploadFile(file) {
-  const res = await storage.createFile(CONFIG.bucketId, ID.unique(), file);
-  return res.$id;
+  return await uploadImage(file);
 }
 
 $("editorSave").addEventListener("click", async () => {
@@ -308,13 +308,13 @@ $("editorSave").addEventListener("click", async () => {
     // clean up replaced / removed images
     const toDelete = editing.removed.slice();
     if (oldMain) toDelete.push(oldMain);
-    for (const id of toDelete) { try { await storage.deleteFile(CONFIG.bucketId, id); } catch (e) {} }
+    for (const id of toDelete) { try { await deleteImage(id); } catch (e) {} }
 
     toast("Car saved");
     closeEditor();
     await loadCars();
   } catch (e) {
-    for (const id of uploaded) { try { await storage.deleteFile(CONFIG.bucketId, id); } catch (x) {} }
+    for (const id of uploaded) { try { await deleteImage(id); } catch (x) {} }
     err.textContent = "Save failed: " + e.message;
     prog.textContent = "";
     $("editorSave").disabled = false;
