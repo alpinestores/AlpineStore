@@ -3,42 +3,196 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ALPINESTORES — Connection Test</title>
-  <style>
-    body {
-      background: #050505; color: #fff; font-family: Arial, sans-serif;
-      display: flex; align-items: center; justify-content: center;
-      min-height: 100vh; margin: 0; text-align: center; padding: 20px;
-    }
-    h1 { color: #F5C518; letter-spacing: 4px; }
-    .ok { color: #4ade80; }
-    .bad { color: #f87171; }
-    code { background: #1a1a1a; padding: 2px 6px; border-radius: 4px; }
-  </style>
+  <title>ALPINESTORES — Premium CPM Showroom</title>
+  <meta name="description" content="ALPINESTORES: exclusive Car Parking Multiplayer showroom." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div>
-    <h1>ALPINESTORES</h1>
-    <p id="status">Testing connection to Appwrite...</p>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-logo">ALPINE<span>STORES</span></div>
+      <div class="loader-bar"><i></i></div>
+    </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2"></script>
-  <script src="config.js"></script>
-  <script>
-    const statusEl = document.getElementById("status");
+  <!-- HEADER -->
+  <header class="topbar">
+    <a href="index.html" class="logo">ALPINE<span>STORES</span></a>
+    <nav class="top-actions">
+      <button id="searchBtn" class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      </button>
+      <button id="wishBtn" class="icon-btn" aria-label="Wishlist">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9.3-9.2C1.2 8.6 3 5 6.5 5c2 0 3.5 1.1 5.5 3 2-1.9 3.5-3 5.5-3C21 5 22.8 8.6 21.3 11.8 19 16.4 12 21 12 21z"/></svg>
+        <b id="wishCount" class="count hidden">0</b>
+      </button>
+      <button id="supportBtn" class="icon-btn text-btn">Support</button>
+    </nav>
+  </header>
 
-    databases
-      .listDocuments(CONFIG.databaseId, CONFIG.carsCollectionId)
-      .then((res) => {
-        statusEl.className = "ok";
-        statusEl.textContent =
-          "✅ Connected! Cars in database: " + res.total;
-      })
-      .catch((err) => {
-        statusEl.className = "bad";
-        statusEl.innerHTML =
-          "❌ Connection failed:<br><code>" + err.message + "</code>";
-      });
-  </script>
+  <!-- SINGLE CAR SHOWCASE -->
+  <main id="showcase">
+    <!-- Blurred backgrounds (two layers for smooth crossfade) -->
+    <div class="bg-layer active" id="bgA"></div>
+    <div class="bg-layer" id="bgB"></div>
+    <div class="bg-dim"></div>
+
+    <!-- Loading / empty states -->
+    <div id="emptyState" class="empty hidden">
+      <h2>No cars yet</h2>
+      <p>New vehicles are arriving soon. Please check back shortly.</p>
+    </div>
+
+    <div id="stage" class="stage hidden">
+
+      <div class="car-area">
+        <button id="prevBtn" class="arrow left" aria-label="Previous car">
+          <svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></svg>
+        </button>
+
+        <div class="car-frame" id="carFrame">
+          <div class="glow"></div>
+          <img id="carImg" class="car-img" alt="" draggable="false" />
+          <div class="badges">
+            <span id="newBadge" class="badge new hidden">NEW</span>
+            <span id="statusBadge" class="badge status">AVAILABLE</span>
+          </div>
+        </div>
+
+        <button id="nextBtn" class="arrow right" aria-label="Next car">
+          <svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg>
+        </button>
+      </div>
+
+      <div class="info" id="info">
+        <div class="counter"><span id="counterNow">01</span><i></i><span id="counterTotal">01</span></div>
+        <h1 id="carName">—</h1>
+        <div id="carPrice" class="price">₹0</div>
+        <p id="carDesc" class="desc"></p>
+
+        <div class="cta">
+          <button id="buyBtn" class="btn-gold">BUY NOW</button>
+          <button id="detailsBtn" class="btn-ghost">View Details</button>
+          <button id="heartBtn" class="btn-heart" aria-label="Add to wishlist">
+            <svg viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9.3-9.2C1.2 8.6 3 5 6.5 5c2 0 3.5 1.1 5.5 3 2-1.9 3.5-3 5.5-3C21 5 22.8 8.6 21.3 11.8 19 16.4 12 21 12 21z"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="logo">ALPINE<span>STORES</span></div>
+        <p class="muted">A premium showroom for Car Parking Multiplayer. Every car personally handled by our team.</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p class="muted" id="footerContact">Use the Support button to reach us.</p>
+      </div>
+      <div>
+        <h4>How it works</h4>
+        <p class="muted">Pick a car, press Buy Now, send your request and we will contact you to complete the deal.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © <span id="year"></span> ALPINESTORES. Not affiliated with Car Parking Multiplayer or Olzhass.
+    </div>
+  </footer>
+
+  <!-- DETAILS MODAL -->
+  <div class="modal" id="detailsModal">
+    <div class="modal-box wide glass">
+      <button class="modal-close" data-close>&times;</button>
+      <div class="details-grid">
+        <div class="details-gallery">
+          <div class="details-main"><img id="detMainImg" alt="" /></div>
+          <div class="details-thumbs" id="detThumbs"></div>
+        </div>
+        <div class="details-text">
+          <span id="detStatus" class="badge status">AVAILABLE</span>
+          <h2 id="detName"></h2>
+          <div id="detPrice" class="price"></div>
+          <h4>Description</h4>
+          <p id="detDesc" class="muted"></p>
+          <h4>Customization</h4>
+          <p id="detCustom" class="muted"></p>
+          <button id="detBuyBtn" class="btn-gold full">BUY NOW</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUY MODAL -->
+  <div class="modal" id="buyModal">
+    <div class="modal-box glass">
+      <button class="modal-close" data-close>&times;</button>
+      <div id="buyFormWrap">
+        <h2>Purchase Request</h2>
+        <div class="buy-summary">
+          <span id="buyCarName"></span>
+          <b id="buyCarPrice"></b>
+        </div>
+        <label>Your Name</label>
+        <input id="buyName" type="text" maxlength="100" placeholder="Full name" />
+        <label>CPM ID</label>
+        <input id="buyCpm" type="text" maxlength="50" placeholder="Your Car Parking Multiplayer ID" />
+        <label>Contact (WhatsApp / Telegram / Email)</label>
+        <input id="buyContact" type="text" maxlength="200" placeholder="How can we reach you?" />
+        <p id="buyError" class="form-error"></p>
+        <button id="buySubmit" class="btn-gold full">SUBMIT REQUEST</button>
+        <p class="tiny muted">Submitting a request does not reserve the car. Our team will contact you to confirm.</p>
+      </div>
+      <div id="buyDone" class="hidden center">
+        <div class="check">✓</div>
+        <h2>Request Sent</h2>
+        <p class="muted">Thank you! We received your request and will contact you soon.</p>
+        <button class="btn-ghost" data-close>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH MODAL -->
+  <div class="modal" id="searchModal">
+    <div class="modal-box glass">
+      <button class="modal-close" data-close>&times;</button>
+      <h2>Search Cars</h2>
+      <input id="searchInput" type="text" placeholder="Type a car name..." autocomplete="off" />
+      <div id="searchResults" class="list"></div>
+    </div>
+  </div>
+
+  <!-- WISHLIST MODAL -->
+  <div class="modal" id="wishModal">
+    <div class="modal-box glass">
+      <button class="modal-close" data-close>&times;</button>
+      <h2>Your Wishlist</h2>
+      <div id="wishList" class="list"></div>
+    </div>
+  </div>
+
+  <!-- SUPPORT MODAL -->
+  <div class="modal" id="supportModal">
+    <div class="modal-box glass">
+      <button class="modal-close" data-close>&times;</button>
+      <h2>Contact Support</h2>
+      <p class="muted">Have a question about a car or your order? Reach us here:</p>
+      <div id="supportLinks" class="list"></div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2/dist/iife/sdk.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
